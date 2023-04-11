@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "removeComments": true,
+  },
+  "include": ["webapp/**"],
+  "exclude": ["node_modules", "webapp/dist"]
+}

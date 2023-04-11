@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "trydev",
+  "version": "0.0.1",
+  "author": "The Unknown Coder <unknown@127.0.0.1>",
+  "contributors": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/techtruth/trydev.git"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=16"
+  },
+  "scripts": {
+    "build": "node webapp/webpack.js --mode=production",
+    "watch": "node webapp/webpack.js --mode=production --watch",
+    "serve": "node webapp/webpack.js --mode=production --serve",
+    "dev:build": "node webapp/webpack.js --mode=development",
+    "dev:watch": "node webapp/webpack.js --mode=development --watch",
+    "dev:serve": "node webapp/webpack.js --mode=development --serve"
+  },
+  "dependencies": {
+    "babel-loader": "^9.1.2",
+    "fork-ts-checker-webpack-plugin": "^8.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.7.5",
+    "minimist": "^1.2.8",
+    "webpack": "^5.78.0",
+    "webpack-dev-server": "^4.13.2"
+  }
+}

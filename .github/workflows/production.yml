@@ -1,0 +1,75 @@
+name: Production Deployment
+
+on:
+  push:
+    branches: [production]
+
+jobs:
+  build-webapp:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Overwrite development credentials with production values
+        run: |
+          cat << EOF > ./webapp-credentials.json
+            {
+              "firebase": {
+              }
+          EOF
+
+      - name: Build webapp in production mode using docker
+        run: docker-compose run --entrypoint "/bin/bash -c 'npm run build'" webapp
+
+      - name: Preserve built front end
+        uses: actions/upload-artifact@v2
+        with:
+          name: dist-production
+          path: |
+            webapp/dist/
+          retention-days: 5
+          if-no-files-found: error
+
+  deploy-webapp:
+    runs-on: ubuntu-latest
+    needs: build-webapp
+    steps:
+      - name: Retrieve previously built front-end
+        uses: actions/download-artifact@v2
+        with:
+          name: dist-production
+          path: webapp/dist
+
+      - name: Upload compiled webapp to s3
+        uses: jakejarvis/s3-sync-action@master
+        with:
+          args: --delete
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: webapp.whateverurl.com
+          AWS_REGION: us-east-1
+          SOURCE_DIR: webapp/dist
+
+      - name: Invalidate cloudfront cache to refresh served content
+        uses: awact/cloudfront-action@master
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PRODUCTION_AWS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PRODUCTION_AWS_SECRET_ACCESS_KEY }}
+          DISTRIBUTION_ID: ${{ secrets.PRODUCTION_CLOUDFRONT }}
+          AWS_REGION: us-east-1
+          SOURCE_PATH: "/*"
+
+  healthcheck:
+    runs-on: ubuntu-latest
+    needs: deploy-webapp
+
+    steps:
+      - name: Webapp Health Check
+        uses: jtalk/url-health-check-action@v2
+        with:
+          url: https://whateverurl.com
+          follow-redirect: true
+          max-attempts: 5
+          retry-delay: 15s
