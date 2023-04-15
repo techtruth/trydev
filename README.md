@@ -2,26 +2,25 @@ How to copy and use this repo for your own purposes
 
 Variables you will want to pay attention to:
  - AWS login credentials for terraform user
+ - GitHub Personal Access Token for setting github secrets
  - The website domain of your new application
 
-Make an AWS account
+Register with Amazon AWS
 Make a service account in AWS IAM named terraform
 Assign a policy with the permissions:
+  allS3
+  allCloudfront
+  allRoute53
+Generate a service key for the user terraform
 
-Login with terraform user credentials
-Run terraform plan
-Run terraform apply
-
--- infrastructure is now provisioned
-
-Make a github account
+Register with GitHub
 Make a repo in the github account
-Make a github secret for the terraform aws users credentials
-Modify these source files being sure to replace the website domain
+Make github secrets for terraform service key as AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY
+Modify these source files being sure to replace the website domain!
 Push these files to your new repo
 Merge PR into development branch
 
--- application is now deployed to development
+-- Continuous Integration will now provision infrastrucure, build source code, and deploy application
 
 Merge PR into production from development
 

@@ -1,3 +1,5 @@
 node_modules
 webapp/dist
 package-lock.json
+.terraform
+.terraform.lock.hcl

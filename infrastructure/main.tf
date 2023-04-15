@@ -1,9 +1,9 @@
 terraform {
-  required_version = "<= 1.3.4"
+  required_version = ">= 1.4.5"
 
   backend "s3" {
-    bucket         = "infrastructure-terraform"
-    key            = "${var.deployment_tag}/terraform.tfstate"
+    bucket         = "trydev.terraform-state"
+    key            = "trydev/terraform.tfstate"
     region         = "us-east-1"
     dynamodb_table = "tf-state-lock"
     encrypt        = true
@@ -12,7 +12,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "=4.39.0"
+      version = "~>4.0"
     }
     github = {
       source  = "integrations/github"
@@ -27,6 +27,5 @@ provider "github" {
 }
 
 provider "aws" {
-  alias  = "virginia"
   region = "us-east-1"
 }
