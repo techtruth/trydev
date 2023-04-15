@@ -1,7 +1,7 @@
 version: '2'
 services: 
  
- api:
+ webapp:
   build: 
     context: ..
     dockerfile: containerization/Dockerfile.webapp
