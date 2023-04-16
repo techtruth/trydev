@@ -1,7 +1,7 @@
 module "s3_bucket" {
-  source = "terraform-aws-modules/s3-bucket/aws"
-  bucket = var.domain_name
-  acl    = "private"
+  source        = "terraform-aws-modules/s3-bucket/aws"
+  bucket        = var.domain_name
+  acl           = "private"
   force_destroy = true
   tags = {
     Name = var.deployment_tag
@@ -102,7 +102,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 
 resource "aws_route53_record" "webapp" {
   name    = var.domain_name
-  zone_id =  var.hosted_zone
+  zone_id = var.hosted_zone
   type    = "A"
 
   alias {
@@ -113,13 +113,13 @@ resource "aws_route53_record" "webapp" {
 }
 
 resource "github_actions_secret" "set_cloudfront_secret" {
-  repository = var.github_repo
+  repository      = var.github_repo
   secret_name     = "DEVELOPMENT_CLOUDFRONT"
   plaintext_value = aws_cloudfront_distribution.webapp.id
 }
 
 resource "github_actions_secret" "set_s3_secret" {
-  repository = var.github_repo
+  repository      = var.github_repo
   secret_name     = "DEVELOPMENT_S3"
   plaintext_value = module.s3_bucket.s3_bucket_id
 }
