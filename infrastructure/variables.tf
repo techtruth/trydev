@@ -15,7 +15,7 @@ variable "hosted_zone" {
 
 variable "github_pat" {
   description = "Github Personal Access Token for github authentication"
-  default     = "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"
+  default     = "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"
 }
 variable "github_repo" {
   description = "Github repo to publish deployment secrets from provisioning"
