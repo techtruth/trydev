@@ -102,7 +102,7 @@ resource "aws_s3_bucket_policy" "bucket_policy" {
 
 resource "aws_route53_record" "webapp" {
   name    = var.domain_name
-  zone_id =  aws_route53_zone.webapp.zone_id
+  zone_id =  var.hosted_zone
   type    = "A"
 
   alias {
