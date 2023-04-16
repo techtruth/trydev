@@ -8,12 +8,14 @@ jobs:
   provision-infrastructure:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform fmt
-        run: ls -a
-        #run: terraform -chdir=infrastructure fmt -check
+        run: terraform -chdir=infrastructure fmt -check
 
       - name: Terraform Init
         env:
