@@ -12,25 +12,25 @@ jobs:
         uses: hashicorp/setup-terraform@v2
 
       - name: Terraform fmt
-        run: terraform fmt -check
+        run: terraform -chdir=container fmt -check
 
       - name: Terraform Init
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform init
+        run: terraform -chdir=container init
 
       - name: Terraform Validate
-        run: terraform validate
+        run: terraform -chdir=container validate
 
       - name: Terraform Plan
-        run: terraform plan
+        run: terraform -chdir=container plan
       
       - name: Terraform Apply
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: terraform apply
+        run: terraform -chdir=container apply
 
   build-webapp:
     runs-on: ubuntu-latest
